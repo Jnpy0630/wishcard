@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WISH CARD 交易成功</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #000; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .card-info { text-align: center; animation: fadeIn 1s ease-in; }
+        .success-icon { font-size: 80px; color: #4CD964; margin-bottom: 20px; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .amount { font-size: 40px; font-weight: bold; margin: 10px 0; color: #FFFFFF; }
+        .label { font-size: 18px; color: #8E8E93; letter-spacing: 2px; }
+        .remaining { font-size: 22px; margin-top: 30px; color: #FFD700; font-weight: bold; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .date { font-size: 13px; color: #48484A; margin-top: 40px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0); } to { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div class="card-info">
+        <div class="success-icon">✓</div>
+        <div class="label">交易成功</div>
+        <div class="amount">- 1 許願點數</div>
+        <div class="remaining" id="points-display">讀取中...</div>
+        
+        <div class="date">
+            交易時間：<span id="current-time"></span><br>
+            在一起的第 <span id="days-count"></span> 天
+        </div>
+    </div>
+
+    <script>
+        // 1. 設定紀念日並計算天數
+        const startDate = new Date("2024-12-20");
+        const today = new Date();
+        const diffTime = Math.abs(today - startDate);
+        const totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        document.getElementById('days-count').innerText = totalDays;
+
+        // 2. 許願點數扣點邏輯
+        let wishBalance = localStorage.getItem('wish_points_22');
+        
+        if (wishBalance === null) {
+            wishBalance = 22; // 第一次啟動設定為 22 點
+        } else {
+            wishBalance = parseInt(wishBalance);
+        }
+        
+        // 執行扣點（扣到 0 為止）
+        if (wishBalance > 0) {
+            wishBalance -= 1;
+            localStorage.setItem('wish_points_22', wishBalance);
+        }
+        
+        // 3. 顯示剩餘點數
+        document.getElementById('points-display').innerText = "剩餘許願額度：" + wishBalance + " / 22 Pts";
+
+        // 4. 顯示當前交易時間
+        const now = new Date();
+        document.getElementById('current-time').innerText = now.toLocaleString();
+    </script>
+</body>
+</html>
